@@ -1,0 +1,47 @@
+<div class="home-container">
+
+
+  {% if request.user.is_authenticated %}
+  <a href="{% url 'logout' %}">Logout</a>
+  {% else %}
+  <a href="{% url 'login' %}">Login</a>
+  {% endif %}
+  <div>
+    <h3>browser topics</h3>
+    <form method="GET" action="{% url 'home' %}">
+      <input type="text"  name="q" placeholder="search...">
+
+    </form>
+    <h4>
+      <a href="{% url 'home' %}"> All </a>
+      {% for x in topic %}
+      <a href="{% url 'home' %}?q={{x.name}}"> {{x.name}} </a>
+      {% endfor %}
+    </h4>
+    <hr />
+  </div>
+
+  <div>
+    <a href="{% url 'create_room' %}">New rooms</a>
+     <p>Number of rooms : {{room_count}}</p>
+    <ol>
+      {% for x in rooms %}
+      <li>
+        <span> @{{x.host_user.username}} </span>
+        <p>
+          <a href="{% url 'room' x.id %}"> {{x.name}} </a>
+        </p>
+        <h6>{{x.topic.name}}</h6>
+        <br />
+        <h4>
+          {% if request.user == x.host_user %}
+          <a href="{% url 'update_room' x.id %}">UPDATE</a>
+          <a href="{% url 'delete_room' x.id %}">DELETE</a>
+          {% endif %}
+        </h4>
+      </li>
+      <hr />
+      {% endfor %}
+    </ol>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+<center>
+    <h2>
+
+        <form method="POST" action="">
+            {% csrf_token %}
+            username:
+            <input type="text" name="username" placeholder="username">
+            <br/>
+            password:
+            <input type="password" name="password" placeholder="password">
+            <br/>
+            <input type="submit" value="GO">
+        
+            {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        </form>
+    </h2>
+</center>
