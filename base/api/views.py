@@ -110,25 +110,26 @@ def loginUser(request):
     data={}
     if serializer.is_valid():
        user= serializer.save()
+       return Response("Logged in")
+    return Response('Enter the data')
+    # username = user.username
+    # password = user.password
 
-    username = user.username
-    password = user.password
+    # try:
+    #     user = User.objects.get(username=username)
+    # except:
+    #     return Response('User does not exist')
 
-    try:
-        user = User.objects.get(username=username)
-    except:
-        return Response('User does not exist')
+    #     # error or give a user object of the user
+    # user = authenticate(request, username=username, password=password)
 
-        # error or give a user object of the user
-    user = authenticate(request, username=username, password=password)
+    # if user is not None:
+    #     # create a session id in the cookies
+    #     login(request, user)
+    #     return Response(data)
 
-    if user is not None:
-        # create a session id in the cookies
-        login(request, user)
-        return Response(data)
-
-    else:
-        return Response('Invalid data')
+    # else:
+    #     return Response('Invalid data')
 
 # register a user
 @api_view(['POST'])

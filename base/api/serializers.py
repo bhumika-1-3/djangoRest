@@ -4,7 +4,8 @@ from rest_framework import serializers
 from base.models import Room
 from base.models import Topic, extra
 from django.contrib.auth.models import User
-
+from rest_framework.response import Response
+from django.contrib.auth import authenticate, login, logout
 
 class RoomSerializers(serializers.ModelSerializer):
     class Meta:
@@ -75,11 +76,32 @@ class LoginSerializers(serializers.ModelSerializer):
             'password': {'write_only': True},
         }
 
-    def save(self):
-        user = User(
-            username=self.validated_data['username'],
-            password=self.validated_data['password'],
-        )
+    def validate(self, attrs):
+        username = attrs.get('username', '')
+        password = attrs.get('password', '')
+        try:
+            myuser = User.objects.get(username=username)
+        except:
+            return Response('User does not exist')
+
+        # error or give a user object of the user
+        user = authenticate(username=username, password=password)
+
+        if not user:
+            # create a session id in the cookies
+            return Response('Invalid data')
+
+        else:
+            login(user)
+            return Response('Correct data')
+
+        # return super().validate(attrs)
+
+    # def save(self):
+    #     user = User(
+    #         username=self.validated_data['username'],
+    #         password=self.validated_data['password'],
+    #     )
 
         # password=self.validated_data['password'],
         # password2=self.validated_data['password2'],
@@ -89,4 +111,4 @@ class LoginSerializers(serializers.ModelSerializer):
         # user.set_password(password)
 
         # user.save()
-        return user
+        # return user
